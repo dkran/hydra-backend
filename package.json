@@ -1,0 +1,21 @@
+{
+  "name": "scanner",
+  "version": "1.0.0",
+  "description": "Masscanner webui",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "http://www.github.com/dkran/scanner.git"
+  },
+  "author": "Daryl Kranec",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.16.2",
+    "leveldb": "^0.7.1",
+    "lokijs": "^1.5.1",
+    "ws": "^3.3.2"
+  }
+}

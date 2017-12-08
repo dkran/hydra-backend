@@ -9,7 +9,8 @@ const app = express();
 const server = http.createServer(app);
 const wss = new WebSocket.Server({server});
 const db = new loki('ipinfo');
-var ips = db.addCollection('ipinfo', {indices: ['ip'
+const util = require('./util')
+var ips = db.addCollection('ipinfo', {indices: ['ip']})
 
 app.use(function(req, res){
     const location = url.parse(req.url, true);
@@ -19,7 +20,7 @@ app.use(function(req, res){
 function heartbeat(){
     this.isAlive = true;
 }
-``
+
 wss.on('connection', function connection(ws, req){
     console.log('Someone Connected!')
     ws.isAlive = true;
@@ -27,7 +28,8 @@ wss.on('connection', function connection(ws, req){
     ws.send(JSON.stringify({
         type: 'signal', 
         message: 'connected', 
-        data: getIPs(),
+        data: getIPs()
+    }))
     scan('69.206.112.85','16','80,8000-8100',ws)
 
 })
@@ -51,8 +53,8 @@ function scan(ip, range, ports, ws){
     const scanner = spawn('masscan', [(ip + '/' + range),'--rate=400','-p' + ports]);
     ws.send(JSON.stringify({type: 'signal', data: 'incoming ip'}))
     scanner.stdout.on('data', (data)=>{
-        var port = stripNums(data.toString().slice(21,25))
-        var ip = stripNums(data.toString().slice(31,48))
+        var port = util.stripNums(data.toString().slice(21,25))
+        var ip = util.stripNums(data.toString().slice(31,48))
         var record = ips.find({'ip':{'$eq': ip}})
         if(record.length > 0){
             if(record[0].ports.indexOf(port) === -1){
@@ -86,7 +88,6 @@ function scan(ip, range, ports, ws){
 
         ws.send(JSON.stringify({type: 'ipdata', data: getIPs()}))
     })
-    
     scanner.stderr.on('data', (data)=>{
        //console.log('Error %s', data)
     })
@@ -95,23 +96,11 @@ function scan(ip, range, ports, ws){
         console.log('Done Scanning')
         ws.send(JSON.stringify({
             type: 'ipdata', 
-            data: getIPs(),
+            data: util.getIPs(ips),
          complete: true
         }))
     })
 
-}
-
-function checkService(service){
-    if(blankOrNull(service.port) && blankOrNull(service.state) && blankOrNull(service.service) && blankOrNull(service.version))
-        return false
-    return true
-}
-
-function blankOrNull(item){
-    if((item === undefined) || (item === ''))
-        return true
-    return false
 }
 
 function discoverService(host, port, fn){
@@ -131,13 +120,13 @@ function discoverService(host, port, fn){
             var service = data.toString().slice(index, index+50).split(' ')
             portService.port = service[0]
             portService.state = service[1]
-            portService.service = stripPostNull(service[3])
+            portService.service = util.stripPostNull(service[3])
     
             for(var i = 7; i< service.length; i++){
                 if(service[i]){
                     if(i === service.length - 1){
                         portService.version += service[i]
-                        portService.version = stripPostNull(portService.version)
+                        portService.version = util.stripPostNull(portService.version)
                         fn(portService)                        
                         
                     }else{
@@ -160,44 +149,4 @@ function discoverService(host, port, fn){
             fn(portService)
         }
     })
-}
-
-function stripPostNull(string){
-    if(string){
-        if(string.indexOf('\n') !== -1){
-            return string.slice(0,string.indexOf('\n'))
-        }else{
-            return string
-        }
-    }
-    
-    return string
-}
-
-function getIPs(){
-    return ips.chain()
-    .where(function(obj){ return obj.ip.indexOf('.') != -1})
-    .simplesort('ip')
-    .data()
-}
-
-function stripNums(data){
-    newData = ''
-    for(let i = 0; i < data.length; i++){
-        if(isNumber(data[i])){
-            newData+= data[i]
-        }
-    }
-    return newData.trim();
-}
-
-function isNumber(number){
-    if((!(number > -1) && !(number >10))){
-        if(number == '.'){
-            return true
-        }
-        return false
-    }else{
-        return true
-    }
 }

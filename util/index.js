@@ -1,5 +1,5 @@
 module.exports.checkService =(service)=>{
-    if(blankOrNull(service.port) && blankOrNull(service.state) && blankOrNull(service.service) && blankOrNull(service.version))
+    if(this.blankOrNull(service.port) && this.blankOrNull(service.state) && this.blankOrNull(service.service) && this.blankOrNull(service.version))
         return false
     return true
 }
@@ -30,25 +30,15 @@ module.exports.isNumber = (number)=>{
         return true
     }
 }
-
-module.exports.getIPs=(ips)=>{
-    return ips.chain()
-    .where(function(obj){ return obj.ip.indexOf('.') != -1})
-    .simplesort('ip')
-    .data()
-}
-
-function stripNums(data){
+module.exports.stripNums = (data)=>{
     newData = ''
     for(let i = 0; i < data.length; i++){
-        if(isNumber(data[i])){
+        if(this.isNumber(data[i])){
             newData+= data[i]
         }
     }
     return newData.trim();
 }
-
-    
 
 module.exports.stripPostNull = (string)=>{
     if(string){

@@ -1,6 +1,4 @@
-const {spawn} = require('child_process');
 const inspect = require('util').inspect;
-const loki = require('lokijs');
 const express = require('express');
 const url = require('url')
 const http = require('http');
@@ -8,12 +6,10 @@ const WebSocket = require('ws');
 const app = express();
 const server = http.createServer(app);
 const wss = new WebSocket.Server({server});
-const database = new loki('ipinfo');
+const ips = require('./db').ips
 const util = require('./util');
 const db = require('./db');
-const getStats = require('./stats');
-var ips = database.addCollection('ipinfo', {indices: ['ip']})
-
+const discover = require('./discover');
 app.use(function(req, res){
     const location = url.parse(req.url, true);
     res.sendFile(__dirname + '/srv/dist' + location.path)
@@ -32,9 +28,14 @@ wss.on('connection', function connection(ws, req){
         message: 'connected', 
         data: db.getIPs(ips)
     }))
-    scan('69.206.112.85','16','80,8000-8100',ws)
+    discover.scan('69.206.112.85','16','80,8000-8100',ws)
 
 })
+
+server.listen(3000, ()=>{
+    console.log('server listening on 3000')
+})
+
 
 const interval = setInterval(function(){
     wss.clients.forEach(function(ws){
@@ -46,56 +47,3 @@ const interval = setInterval(function(){
 
 
 
-
-
-function discoverService(host, port, fn){
-    const nmap = spawn('nmap', ['-sV','-p',port,host]);
-    var portService = {
-        port: '',
-        state: '',
-        service: '',
-        version: ''
-    }
-
-    console.log('discovering %s:%s', host, port)
-    nmap.stdout.on('data', (data)=>{
-        
-        if(data.toString().indexOf(port + '/tcp')){
-            var index = data.toString().indexOf(port + '/tcp')
-            var service = data.toString().slice(index, index+50).split(' ')
-            portService.port = service[0]
-            portService.state = service[1]
-            portService.service = util.stripPostNull(service[3])
-    
-            for(var i = 7; i< service.length; i++){
-                if(service[i]){
-                    if(i === service.length - 1){
-                        portService.version += service[i]
-                        portService.version = util.stripPostNull(portService.version)
-                        fn(portService)                        
-                        
-                    }else{
-                        portService.version += service[i] + ' '
-                    
-                    }
-                }
-            }
-            portService.version = util.stripPostNull(portService.version)
-        }  
-    })
-    nmap.stderr.on('data', (data)=>{
-        if(data.toString().indexOf('WARNING: RST') === -1)
-            console.log('stderr %s', data.toString())
-       console.log('Error %s', data)
-       
-    })
-    nmap.on('close', (code)=>{
-        if(util.checkService(portService)){
-            fn(portService)
-        }
-    })
-}
-
-server.listen(3000, ()=>{
-    console.log('server listening on 3000')
-})

@@ -79,11 +79,11 @@ module.exports.scan = (ip, range, ports, ws)=>{
                 record[0][port] = service
                 ips.update(record)
                 console.log(record)
-                ws.send(JSON.stringify({type: 'ipdata', data: db.getIPs(ips)}))
+                ws.send(JSON.stringify({type: 'ipdata', data: db.getIPs()}))
             }else{
                 newRow[port] = service
                 ips.update(newRow)
-                ws.send(JSON.stringify({type: 'ipdata', data: db.getIPs(ips)}))
+                ws.send(JSON.stringify({type: 'ipdata', data: db.getIPs()}))
                 
             }
         })
@@ -91,7 +91,7 @@ module.exports.scan = (ip, range, ports, ws)=>{
         console.log(ip + ':' + port)
         
 
-        ws.send(JSON.stringify({type: 'ipdata', data: db.getIPs(this.ips)}))
+        ws.send(JSON.stringify({type: 'ipdata', data: db.getIPs()}))
     })
     
     scanner.stderr.on('data', (data)=>{
@@ -102,7 +102,7 @@ module.exports.scan = (ip, range, ports, ws)=>{
         console.log('Done Scanning')
         ws.send(JSON.stringify({
             type: 'ipdata', 
-            data: db.getIPs(ips),
+            data: db.getIPs(),
          complete: true
         }))
     })

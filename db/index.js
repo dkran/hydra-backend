@@ -4,6 +4,8 @@ var ips = db.addCollection('ipinfo', {indices: ['ip']})
 module.exports.ips = ips
 //module.exports = ips;
 
+//get all IPs and Attributes
+
 module.exports.getIPs=()=>{
     return this.ips.chain()
     .where(function(obj){ return obj.ip.indexOf('.') != -1})

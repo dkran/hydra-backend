@@ -1,7 +1,6 @@
 const util = require('../util');
 const db = require('../db');
 const ips = require('../db').ips
-
 const {spawn} = require('child_process');
 
 module.exports.discoverService = (host, port, fn)=>{
@@ -12,10 +11,8 @@ module.exports.discoverService = (host, port, fn)=>{
         service: '',
         version: ''
     }
-
-    console.log('discovering %s:%s', host, port)
-    nmap.stdout.on('data', (data)=>{
-        
+    console.log('Discover Service: %s:%s', host, port)
+    nmap.stdout.on('data', (data)=>{      
         if(data.toString().indexOf(port + '/tcp')){
             var index = data.toString().indexOf(port + '/tcp')
             var service = data.toString().slice(index, index+50).split(' ')
@@ -67,7 +64,6 @@ module.exports.scan = (ip, range, ports, ws)=>{
                 record[0].ports.push(port)
                 ips.update(record)
             }    
-            
         }else{
             var newRow = ips.insert({'ip': ip, 'ports': [port]})
         }

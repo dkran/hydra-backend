@@ -7,12 +7,12 @@ module.exports.ips = ips
 //get all IPs and Attributes
 
 module.exports.getIPs=()=>{
-    return this.ips.chain()
+    return ips.chain()
     .where(function(obj){ return obj.ip.indexOf('.') != -1})
     .simplesort('ip')
     .data()
 }
 
 module.exports.getIP=(ip)=>{
-    return this.ips.find({'ip':{'$eq': ip}})
+    return ips.find({'ip':{'$eq': ip}})
 }

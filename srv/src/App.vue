@@ -17,12 +17,18 @@
 </template>
 
 <script>
+var scan = require('../discover')
 var ws = new WebSocket('ws://localhost:3000');
 var data = {ips: null}
 ws.addEventListener('message', (event)=>{
   console.log(event.data)
   data.ips = JSON.parse(event.data)
 })
+
+var startScan = (ip,subrange,ports,)=>{
+  e
+}
+
 export default {
   name: 'app',
   data () {

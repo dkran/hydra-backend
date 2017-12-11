@@ -1,9 +1,14 @@
-const loki = require('lokijs');
+const express = require('express');
+const http = require('http');
+const server = http.createServer(require('../app'));
+const WebSocket = require('ws');
+const app = express();
+const wss = new WebSocket.Server({server});
+const loki = require('loki.appjs');
 const db = new loki('ipinfo');
-var ips = db.addCollection('ipinfo', {indices: ['ip']})
-module.exports.ips = ips
-//module.exports = ips;
-
+module.exports.ips = db.addCollection('ipinfo', {indices: ['ip']})
+module.exports.wss = wss
+module.exports.app = app
 //get all IPs and Attributes
 
 module.exports.getIPs=()=>{

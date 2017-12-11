@@ -1,16 +1,8 @@
 const inspect = require('util').inspect;
-const express = require('express');
 const url = require('url')
-const http = require('http');
-const WebSocket = require('ws');
-const app = express();
-const server = http.createServer(app);
-const wss = new WebSocket.Server({server});
-const ips = require('./db').ips
-const util = require('./util');
-const db = require('./db');
 const discover = require('./discover');
-app.use(function(req, res){
+const db = require('./db')
+db.app.use(function(req, res){
     const location = url.parse(req.url, true);
     res.sendFile(__dirname + '/srv/dist' + location.path)
 })
@@ -19,7 +11,7 @@ function heartbeat(){
     this.isAlive = true;
 }
 
-wss.on('connection', function connection(ws, req){
+db.wss.on('connection', function connection(ws, req){
     console.log('Someone Connected!')
     ws.isAlive = true;
     ws.on('pong', heartbeat)

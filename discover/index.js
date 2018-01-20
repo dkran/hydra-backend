@@ -3,6 +3,8 @@ const db = require('../db');
 const ips = require('../db').ips
 const {spawn} = require('child_process');
 
+isScanning = false;
+
 module.exports.discoverService = (host, port, fn)=>{
     const nmap = spawn('nmap', ['-sV','-p',port,host]);
     var portService = {
@@ -36,7 +38,7 @@ module.exports.discoverService = (host, port, fn)=>{
     nmap.stderr.on('data', (data)=>{
         if(data.toString().indexOf('WARNING: RST') === -1)
             console.log('stderr %s', data.toString())
-       console.log('Error %s', data)
+        console.log('Error %s', data)
        
     })
     nmap.on('close', (code)=>{
@@ -47,6 +49,7 @@ module.exports.discoverService = (host, port, fn)=>{
 }
 
 module.exports.scan = (ip, range, ports, ws)=>{
+    isScanning = true
     ip = ip || '173.62.7.72'
     range =  range || '24'
     ports = ports || '8000-8100'
@@ -72,6 +75,7 @@ module.exports.scan = (ip, range, ports, ws)=>{
                 record[0][port] = service
                 ips.update(record)
                 console.log(record)
+                  
                 ws.send(JSON.stringify({type: 'ipdata', data: db.getIPs()}))
             }else{
                 newRow[port] = service
@@ -92,7 +96,7 @@ module.exports.scan = (ip, range, ports, ws)=>{
     })
     
     scanner.on('close', (code)=>{
-        console.log('Done Scanning')
+        isScanning = false
         ws.send(JSON.stringify({
             type: 'ipdata', 
             data: db.getIPs(),

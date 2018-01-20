@@ -1,17 +1,2 @@
 node_modules
 src/node_modules
-node_modules/ws/index.js
-node_modules/ws/package.json
-node_modules/ws/lib/WebSocketServer.js
-node_modules/ws/README.md
-node_modules/ws/lib/.DS_Store
-node_modules/ws/lib/BufferUtil.js
-node_modules/ws/lib/Constants.js
-node_modules/ws/lib/ErrorCodes.js
-node_modules/ws/lib/EventTarget.js
-node_modules/ws/lib/Extensions.js
-node_modules/ws/lib/PerMessageDeflate.js
-node_modules/ws/lib/Receiver.js
-node_modules/ws/lib/Sender.js
-node_modules/ws/lib/Validation.js
-node_modules/ws/lib/WebSocket.js

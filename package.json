@@ -13,10 +13,12 @@
   "author": "Daryl Kranec",
   "license": "ISC",
   "dependencies": {
+    "bufferutil": "^3.0.3",
     "express": "^4.16.2",
     "leveldb": "^0.7.1",
     "lokijs": "^1.5.1",
+    "utf-8-validate": "^4.0.0",
     "vue-strap": "^1.1.40",
-    "ws": "^3.3.2"
+    "ws": "^4.0.0"
   }
 }

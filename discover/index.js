@@ -19,11 +19,8 @@ module.exports.discoverService = (host, port, fn)=>{
             portService.port = service[0]
             portService.state = service[1]
             portService.service = util.stripPostNull(service[3])
-    
             for(var i = 7; i< service.length; i++){
-                if(service[i]){
                     if(i === service.length - 1){
-                        portService.version += service[i]
                         portService.version = util.stripPostNull(portService.version)
                         fn(portService)                        
                         
@@ -35,7 +32,7 @@ module.exports.discoverService = (host, port, fn)=>{
             }
             portService.version = util.stripPostNull(portService.version)
         }  
-    })
+    )
     nmap.stderr.on('data', (data)=>{
         if(data.toString().indexOf('WARNING: RST') === -1)
             console.log('stderr %s', data.toString())

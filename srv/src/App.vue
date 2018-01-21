@@ -6,7 +6,7 @@
       <li>IP</li>
       <li>Ports Available</li>
     </ul>
-    <ul v-for="ip in data.ips">
+    <ul v-for="ip in ips" :key="ip.ip">
       <li>{{ip}}</li>
     </ul>
 
@@ -15,15 +15,27 @@
 
 <script>
 
-export default {
-  data: data
-}
 var ws = new WebSocket('ws://localhost:3000')
-var data = {ips: {}}
-ws.addEventListener('message', (event) => {
-  console.log(event.data)
-  data.ips = JSON.parse(event.data)
-})
+
+export default {
+  data() {
+    return {
+      ips: []
+    }
+  },
+  created() {
+    ws.addEventListener('message', this.handleMessageEvent);
+  },
+  beforeDestroy() {
+    // cleanup listeners (avoids memory leaks) 
+    ws.removeEventListener('message', this.handleMessageEvent);
+  },
+  methods: {
+    handleMessageEvent(event) {
+      this.ips = JSON.parse(event.data)
+    }
+  }
+};
 
 </script>
 

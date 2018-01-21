@@ -1,22 +1,19 @@
-
 <template>
   <div id="app">
     <p>Masscanner UI</p>
-    <ul>
-      <li>IP</li>
-      <li>Ports Available</li>
+    
+    <ul v-for="IP in ips" :key="IP.ip">
+      <ul v-for="ip in IP" :key="ip.ip">
+         <ip-info v-bind:ip="ip"></ip-info>
+      </ul>
     </ul>
-    <ul v-for="ip in ips" :key="ip.ip">
-      <li>{{ip}}</li>
-    </ul>
-
   </div>
 </template>
 
 <script>
 
 var ws = new WebSocket('ws://localhost:3000')
-
+import IpInfo from './components/IpInfo'
 export default {
   data() {
     return {
@@ -33,8 +30,10 @@ export default {
   methods: {
     handleMessageEvent(event) {
       this.ips = JSON.parse(event.data)
+      console.log(event.data)
     }
-  }
+  },
+  components: { IpInfo }
 };
 
 </script>
@@ -47,5 +46,10 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+}
+
+li {
+  display: inline-block;
+  margin: 0 10px;
 }
 </style>

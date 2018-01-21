@@ -1,6 +1,7 @@
 const loki = require('lokijs');
 const db = new loki('ipinfo');
-module.exports.ips = db.addCollection('ipinfo', {indices: ['ip']})
+var ips = db.addCollection('ipinfo', {indices: ['ip']})
+module.exports.ips = ips
 
 
 module.exports.getIPs=()=>{

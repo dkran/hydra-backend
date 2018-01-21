@@ -58,7 +58,7 @@ module.exports.scan = (ip, range, ports, ws)=>{
     scanner.stdout.on('data', (data)=>{
         var port = util.stripNums(data.toString().slice(21,25))
         var ip = util.stripNums(data.toString().slice(31,48))
-        var record = db.getIP(ips, ip)
+        var record = db.getIP(ip)
         if(record.length > 0){
             if(record[0].ports.indexOf(port) === -1){
                 record[0].ports.push(port)
@@ -69,7 +69,7 @@ module.exports.scan = (ip, range, ports, ws)=>{
         }
         this.discoverService(ip, port, (service)=>{
             
-            var record = db.getIP()
+            var record = db.getIPs()
             console.log(newRow)
             if(record.length > 0){
                 record[0][port] = service

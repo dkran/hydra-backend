@@ -1,14 +1,30 @@
+
 <template>
   <div id="app">
-    <img src="./assets/logo.png">
-    <router-view/>
+    <p>Masscanner UI</p>
+    <ul>
+      <li>IP</li>
+      <li>Ports Available</li>
+    </ul>
+    <ul v-for="ip in data.ips">
+      <li>{{ip}}</li>
+    </ul>
+
   </div>
 </template>
 
 <script>
+
 export default {
-  name: 'App'
+  data: data
 }
+var ws = new WebSocket('ws://localhost:3000')
+var data = {ips: {}}
+ws.addEventListener('message', (event) => {
+  console.log(event.data)
+  data.ips = JSON.parse(event.data)
+})
+
 </script>
 
 <style>

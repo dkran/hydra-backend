@@ -1,14 +1,18 @@
 <template>
-      <li>{{ip}}</li>
+
+      <li>
+        <a target ="_blank" v-bind:href="'http://'+ip.ip + ':' + ports">{{ip.ip + ':' + ports.toString()}}</a>
+      </li>
 </template>
 
 <script>
+
 export default {
   name: 'IpInfo',
-  props: [ 'ip' ]
+  props: [ 'ip', 'ports' ]
+
   
 }
-
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

@@ -1,5 +1,4 @@
 <template>
-
       <li>
         <a target ="_blank" v-bind:href="'http://'+ip.ip + ':' + ports">{{ip.ip + ':' + ports.toString()}}</a>
       </li>

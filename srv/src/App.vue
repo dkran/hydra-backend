@@ -1,11 +1,8 @@
 <template>
   <div id="app">
     <p>Masscanner UI</p>
-    
-    <ul v-for="IP in ips" :key="IP.ip">
-      <ul v-for="ip in IP" :key="ip.ip">
-         <ip-info v-bind:ip="ip"></ip-info>
-      </ul>
+    <ul v-for="ip in ips.data" :key="ip.ip">
+      <ip-info v-for="port in ip.ports" :key="port" v-bind:ip="ip" v-bind:ports="port"></ip-info>
     </ul>
   </div>
 </template>
@@ -15,7 +12,7 @@
 var ws = new WebSocket('ws://localhost:3000')
 import IpInfo from './components/IpInfo'
 export default {
-  data() {
+  data () {
     return {
       ips: []
     }

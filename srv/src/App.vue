@@ -2,7 +2,7 @@
   <div id="app">
     <p>Masscanner UI</p>
     <ul v-for="ip in ips.data" :key="ip.ip">
-      <ip-info v-for="port in ip.ports" :key="port" v-bind:ip="ip" v-bind:ports="port"></ip-info>
+      <ip-info v-bind:ip="ip"></ip-info>
     </ul>
   </div>
 </template>

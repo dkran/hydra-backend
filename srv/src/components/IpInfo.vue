@@ -1,14 +1,21 @@
 <template>
-      <li>
-        <a target ="_blank" v-bind:href="'http://'+ip.ip + ':' + ports">{{ip.ip + ':' + ports.toString()}}</a>
-      </li>
+  <div class="card" style="width: 20rem;">
+    <img class="card-img-top" alt="Card image cap">
+      <div class="card-block">
+        <h4 class="card-title">{{ip.ip}}</h4>
+        <ul>
+          <li v-for="port in ip.ports" v-bind:key="port">{{port + ": " + ip[port]}}</li>
+        </ul>
+        <a href="#" class="btn btn-primary">Go somewhere</a>
+      </div>
+  </div>
 </template>
 
 <script>
 
 export default {
   name: 'IpInfo',
-  props: [ 'ip', 'ports' ]
+  props: { ip: Object }
 
   
 }

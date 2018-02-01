@@ -25,7 +25,6 @@ wss.on('connection', function connection(ws, req){
 const broadcast = (data)=>{
         wss.clients.forEach((client)=>{
           if (client.readyState === WebSocket.OPEN) {
-            console.log('sending %s', data )
             client.send(data)
           }
         })

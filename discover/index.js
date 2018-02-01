@@ -69,12 +69,11 @@ module.exports.scan = (ip, range, ports, ws)=>{
         }
         this.discoverService(ip, port, (service)=>{
             
-            var record = db.getIPs()
-            console.log(newRow)
+            var record = db.getIP(ip)
+            //console.log(newRow)
             if(record.length > 0){
                 record[0][port] = service
                 ips.update(record)
-                console.log(record)
                   
                 ws.send(JSON.stringify({type: 'ipdata', data: db.getIPs()}))
             }else{

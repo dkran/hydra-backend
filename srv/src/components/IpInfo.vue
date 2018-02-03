@@ -4,7 +4,8 @@
       <div class="card-block">
         <h4 class="card-title">{{ip.ip}}</h4>
         <ul>
-          <li v-for="port in ip.ports" v-bind:key="port">{{port + ": " + ip[port]}}</li>
+          <li v-for="port in ip.ports" v-if="ip[port]" v-bind:key="port"><a target="_blank" v-bind:href="'http://' + ip.ip + ':' + port">{{port}}</a>: {{ip[port].service}} {{ip[port].version}} {{ip[port].state}}</li>
+          <li v-for="port in ip.ports" v-if="!ip[port]" v-bind:key="port"><a target="_blank" v-bind:href="'http://' + ip.ip + ':' +port">{{port}}</a>: Unknown</li>          
         </ul>
         <a href="#" class="btn btn-primary">Go somewhere</a>
       </div>
@@ -16,6 +17,8 @@
 export default {
   name: 'IpInfo',
   props: { ip: Object }
+
+  
 
   
 }

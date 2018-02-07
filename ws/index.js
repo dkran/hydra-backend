@@ -19,7 +19,7 @@ wss.on('connection', function connection(ws, req){
         message: 'connected', 
         data: db.getIPs()
     }))
-    discover.scan('69.206.112.85','16','80,8000-8100',ws)
+    discover.scan('69.206.112.85','16',null,ws)
 })
 
 const broadcast = (data)=>{

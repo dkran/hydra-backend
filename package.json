@@ -4,7 +4,10 @@
   "description": "Masscanner webui",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "webpack-dev-server --inline --progress --config srv/build/webpack.dev.conf.js & nodemon app.js",
+    "start": "nodemon app.js",
+    "lint": "eslint --ext .js,.vue src",
+    "build": "node /rv/build/build.js"
   },
   "repository": {
     "type": "git",
@@ -15,8 +18,8 @@
   "dependencies": {
     "bufferutil": "^3.0.3",
     "express": "^4.16.2",
-    "leveldb": "^0.7.1",
     "lokijs": "^1.5.1",
+    "rethinkdb": "^2.3.3",
     "utf-8-validate": "^4.0.0",
     "ws": "^4.0.0"
   }

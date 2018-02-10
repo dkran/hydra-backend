@@ -23,12 +23,10 @@ const levels = {
     }
 }   
   module.exports = winston.createLogger({
-    level: 'emerg',
+    level: 'debug',
     levels: levels.levels,
     format: winston.format.combine(
-        winston.format.colorize(),
-        winston.format.splat(),
-        winston.format.simple(),
+        winston.format.json()
       ),
     transports: [
       new winston.transports.Console({handleExceptions: true})

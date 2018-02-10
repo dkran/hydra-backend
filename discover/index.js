@@ -15,7 +15,7 @@ module.exports.discoverService = (host, port, fn)=>{
         service: '',
         version: ''
     }
-    log.debug('Discover Service: %s:%s', host, port)
+    log.debug('Discover: ' + host +':'+ port)
     nmap.stdout.on('data', (data)=>{      
         if(data.toString().indexOf(port + '/tcp')){
             var index = data.toString().indexOf(port + '/tcp')
@@ -30,12 +30,10 @@ module.exports.discoverService = (host, port, fn)=>{
                         
                     }else{
                         portService.version += service[i] + ' '
-                    
+                        portService.version = util.stripPostNull(portService.version)
                     }
                 }
             }
-            portService.version = util.stripPostNull(portService.version)
-            log.debug(('%s:%s',host,port), ...postService)
         }  
     )
     nmap.stderr.on('data', (data)=>{
@@ -45,6 +43,7 @@ module.exports.discoverService = (host, port, fn)=>{
        
     })
     nmap.on('close', (code)=>{
+        log.debug(portService)        
         if(util.checkService(portService)){
             fn(portService)
         }
@@ -64,15 +63,15 @@ module.exports.scan = (ip, range, ports, broadcast)=>{
             var ip = util.stripNums(data.toString().slice(31,48))
             var record = db.getIP(ip)
             if(record.length > 0){
-                log.notice('No existing IP found for %s', ip)
+                log.debug('No existing IP found for %s', ip)
                 if(record[0].ports.indexOf(port) === -1){
-                    log.notice('IP Was found, but port &s already shows open.', port)
+                    log.debug('IP Was found, but port ' + port + ' already shows open.')
                     record[0].ports.push(port)
                     ips.update(record)
                 }    
             }else{
                 var newRow = ips.insert({'ip': ip, 'ports': [port]})
-                log.notice({message: 'No record found.  Creating IP with data',...newRow})
+                log.debug({message: 'No record found.  Creating IP with data',...newRow})
             }
             this.discoverService(ip, port, (service)=>{
                 var record = db.getIP(ip)

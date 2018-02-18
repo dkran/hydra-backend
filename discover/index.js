@@ -73,6 +73,7 @@ module.exports.scan = (ip, range, ports, broadcast)=>{
                 var newRow = ips.insert({'ip': ip, 'ports': [port]})
                 log.debug({message: 'No record found.  Creating IP with data',...newRow})
             }
+            broadcast(JSON.stringify({type: 'ipdata', data: db.getIPs()}))
             this.discoverService(ip, port, (service)=>{
                 var record = db.getIP(ip)
                 if(record.length > 0){

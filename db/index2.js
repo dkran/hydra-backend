@@ -8,25 +8,29 @@ var r = require('rethinkdb'),
 }
 const db = 'scanner'
 
+var handleError = (e)=>{
+    log.error(e)
+}
+
 r.connect({host:'localhost', port: 32769}).then((conn)=>{
     checkExists(conn).then((data)=>{
-        if(!data){
+        log.info(data)
+        if(data){
             log.info('DB Does not exists.  Creating')
-            createDB(conn).then((data)=>{
+            r.dbCreate(db).run(conn).then((data)=>{
                 log.info('DB Created: ', data)
                 log.info('Creating Tables')
                 createTables(conn, ['ips','logs']).then((results)=>{
                     console.log(results)
-                }).catch(log.error)
-            }).catch(log.warning)
+                }).catch(handleError)
+            }).catch(handleError)
+        }else if(!data){
+            createTables(conn, ['ips','logs']).then((results)=>{
+                console.log(results)
+            }).catch(handleError)
         }
-        else if(data){
-            log.info('DB Already exists, attempting to create tables')        
-            createTables(conn, ['ips', 'logs']).then((results)=>{
-            }).catch(log.error)    
-        }
-    }).catch(log.error)
-}).catch(log.error)
+    }).catch(handleError)
+}).catch(handleError)
 
 const createTables = (conn, names)=>{
     var tables = []
@@ -58,7 +62,8 @@ const createTable = (conn, name)=>{
 
 const checkExists = (conn)=>{
     return r.dbList().run(conn).then((data)=>{
-        return checkDB(data)
+        log.info(data)
+        return checkDB(conn, data)
     })
 }
          
@@ -68,24 +73,21 @@ const deleteDB = (conn,cb)=>{
         if(data.indexOf(db) !== -1){
             return r.dbDrop(db).run(conn)
         }
-    }).catch(log.error)
+    }).catch(handleError)
 }
 
-const checkDB = (data)=>{
-    return new Promise(function(resolve, reject){
-        let exists = data.indexOf(db)
-        if(exists > -1){
-            log.info('scanner exists in index %s',data.indexOf(db))
-            resolve(true)
-        }else if(exists === -1){
-            log.warning('DB Does not exist')
-            reject(false)
-        } 
-    })     
-}
-
-const createDB = (conn)=>{
+const checkDB = (conn, data)=>{
     return new Promise((resolve, reject)=>{
-        return r.dbCreate(db).run(conn)
+        {    
+            var exists = data.indexOf(db)
+            if(exists > -1){
+                log.info('scanner exists in index %s',data.indexOf(db))
+                resolve(false)
+            }else if(exists === -1){
+                log.warning('DB Does not exist')
+                resolve(true)
+            } 
+            Promise.reject('failure somewhere')
+        }    
     })
 }

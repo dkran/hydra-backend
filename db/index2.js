@@ -12,7 +12,7 @@ var handleError = (e)=>{
     log.error(e)
 }
 
-r.connect({host:'localhost', port: 32769}).then((conn)=>{
+r.connect({host:'localhost', port: 28015}).then((conn)=>{
     checkExists(conn).then((data)=>{
         log.info(data)
         if(data){
@@ -26,7 +26,7 @@ r.connect({host:'localhost', port: 32769}).then((conn)=>{
             }).catch(handleError)
         }else if(!data){
             createTables(conn, ['ips','logs']).then((results)=>{
-                console.log(results)
+                //console.log(results)
             }).catch(handleError)
         }
     }).catch(handleError)
@@ -54,8 +54,7 @@ const createTable = (conn, name)=>{
             log.info('Created table ' + name)
             return r.db(db).tableCreate(name).run(conn)
         }else if(list.indexOf(name) > -1){
-            log.info('table '+ name + ' exists')
-            return Promise.reject('table ' + name + ' exists')
+            return r.db(db).table(name).run(conn)
         }
     })
 }
@@ -82,12 +81,12 @@ const checkDB = (conn, data)=>{
             var exists = data.indexOf(db)
             if(exists > -1){
                 log.info('scanner exists in index %s',data.indexOf(db))
-                resolve(false)
+                return resolve(false)
             }else if(exists === -1){
                 log.warning('DB Does not exist')
-                resolve(true)
+                return resolve(true)
             } 
-            Promise.reject('failure somewhere')
+            return Promise.reject('failure somewhere')
         }    
     })
 }

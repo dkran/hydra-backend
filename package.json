@@ -20,7 +20,6 @@
     "express": "^4.16.2",
     "lokijs": "^1.5.1",
     "rethinkdb": "^2.3.3",
-    "rethinkdbdash": "^2.3.31",
     "utf-8-validate": "^4.0.0",
     "webpack": "^4.0.1",
     "winston": "^3.0.0-rc1",
@@ -28,6 +27,5 @@
     "xml2js": "^0.4.19"
   },
   "devDependencies": {
-    "webpack-cli": "^2.0.9"
   }
 }

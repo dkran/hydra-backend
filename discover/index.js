@@ -35,18 +35,17 @@ module.exports.scan = (ip, range, ports, broadcast)=>{
             discoverService(ip, port, (service)=>{
                 var record = db.getIP(ip)
                 if(record.length > 0){
-                    record[0][port] = service
+                    record[0][port] = Object.assign(service.port,service.service)
                     ips.update(record)
                     broadcast(JSON.stringify({type: 'ipdata', data: db.getIPs()}))
                 }else{
-                    newRow[port] = service
+                    newRow[port] = Object.assign(service.port,service.service)
                     ips.update(newRow)
                     broadcast(JSON.stringify({type: 'ipdata', data: db.getIPs()}))
                     
                 }
             })
             scanner.stderr.on('data', (data)=>{
-                log.error(data)
              })
              
             scanner.on('close', (code)=>{

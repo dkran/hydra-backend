@@ -8,7 +8,7 @@ module.exports = function(ip, port,cb){
   var port = port || 80
   var xml = (__dirname + '/xml/' + ip + '-' + port)
   const nmap = spawn('nmap', ['-sS','-A','-p',port,'-oX',xml,ip])
-  //nmap.setMaxListeners(30)
+  nmap.setMaxListeners(30)
   nmap.on('close',(data)=>{
     parser = new xml2js.Parser({attrkey: 'i'})
     var ipInfo = {
@@ -30,19 +30,19 @@ module.exports = function(ip, port,cb){
       parser.parseString(unparsedXml, function(err, data){
         if(err) console.log(err)
         if(data.nmaprun.runstats[0].hosts[0].i.up === '1'){
-          ipInfo.port.protocol = data.nmaprun.host[0].ports[0].port[0].i.protocol || null
-          ipInfo.port.port = data.nmaprun.host[0].ports[0].port[0].i.portid || null
-          ipInfo.port.state = data.nmaprun.host[0].ports[0].port[0].state[0].i.state || null
-          ipInfo.port.reason = data.nmaprun.host[0].ports[0].port[0].state[0].i.reason || null
-          ipInfo.port.reason_ttl = data.nmaprun.host[0].ports[0].port[0].state[0].i.reason_ttl || null
-          ipInfo.service = data.nmaprun.host[0].ports[0].port[0].service[0].i || null
+          ipInfo.port.protocol = data.nmaprun.host[0].ports[0].port[0].i.protocol
+          ipInfo.port.port = data.nmaprun.host[0].ports[0].port[0].i.portid
+          ipInfo.port.state = data.nmaprun.host[0].ports[0].port[0].state[0].i.state
+          ipInfo.port.reason = data.nmaprun.host[0].ports[0].port[0].state[0].i.reason
+          ipInfo.port.reason_ttl = data.nmaprun.host[0].ports[0].port[0].state[0].i.reason_ttl
+          ipInfo.service = data.nmaprun.host[0].ports[0].port[0].service[0].i
           if(data.nmaprun.host[0].os[0].osmatch !== undefined){
             ipInfo.osmatch = data.nmaprun.host[0].os[0].osmatch[0].i
             if(data.nmaprun.host[0].os[0].osmatch[0].osclass !== undefined)
-              ipInfo.osclass = data.nmaprun.host[0].os[0].osmatch[0].osclass[0].i || null
+              ipInfo.osclass = data.nmaprun.host[0].os[0].osmatch[0].osclass[0].i
           }
-          ipInfo.time_finished = data.nmaprun.host[0].i.endtime || null
-          //fs.unlinkSync(xml)
+          ipInfo.time_finished = data.nmaprun.host[0].i.endtime
+          fs.unlinkSync(xml)
           console.log(ipInfo)
           cb(ipInfo)
         }else{

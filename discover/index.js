@@ -9,7 +9,7 @@ isScanning = false;
 
 module.exports.scan = (ip, range, ports, broadcast)=>{
     if(!isScanning){
-        log.info('Massscan Starting')
+        log.info('Masscan Starting')
         isScanning = true
         ip = ip || '173.62.7.72'
         range =  range || '24'

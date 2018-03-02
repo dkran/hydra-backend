@@ -5,8 +5,8 @@
         <h4 class="card-title">{{ip.ip}}</h4>
         <ul>
           <li v-for="port in ip.ports" v-if="ip[port]" v-bind:key="port">
-            <a target="_blank" v-if="ip[port].service.indexOf('ssl' || 'https') !== -1" v-bind:href="'https://' + ip.ip + ':' + port">{{port}}</a><span v-if="ip[port].service.indexOf('ssl' || 'https') !== -1"> {{ip[port].service}} {{ip[port].version}} {{ip[port].state}}</span>
-            <a target="_blank" v-if="ip[port].service.indexOf('ssl'|| 'https') == -1" v-bind:href="'http://' + ip.ip + ':' + port">{{port}}</a><span v-if="ip[port].service.indexOf('ssl' || 'https') == -1"> {{ip[port].service}} {{ip[port].version}} {{ip[port].state}}</span></li>
+            <a target="_blank" v-if="(ip[port].product.indexOf('ssl' || 'https')) !== -1 || (port == 443)" v-bind:href="'https://' + ip.ip + ':' + port">{{port}}</a><span v-if="ip[port].product.indexOf('ssl' || 'https') !== -1"> {{ip[port].product}} {{ip[port].version}} {{ip[port].state}}</span>
+            <a target="_blank" v-if="ip[port].product.indexOf('ssl'|| 'https') == -1" v-bind:href="'http://' + ip.ip + ':' + port">{{port}}</a><span v-if="ip[port].product.indexOf('ssl' || 'https') == -1"> {{ip[port].product}} {{ip[port].version}} {{ip[port].state}}</span></li>
           <li v-for="port in ip.ports" v-if="!ip[port]" v-bind:key="port"><a target="_blank" v-bind:href="'http://' + ip.ip + ':' +port">{{port}}</a>: Unknown</li>          
         </ul>
         <a href="#" class="btn btn-primary">Go somewhere</a>

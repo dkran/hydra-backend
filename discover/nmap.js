@@ -25,7 +25,8 @@ module.exports = function(ip, port,cb){
       server_status: null,
       time_finished: null  
     }
-    unparsedXml = fs.readFileSync(xml).toString()
+    if(fs.existsSync(xml))
+      unparsedXml = fs.readFileSync(xml).toString()
     if(unparsedXml){
       parser.parseString(unparsedXml, function(err, data){
         if(err) console.log(err)
@@ -42,7 +43,8 @@ module.exports = function(ip, port,cb){
               ipInfo.osclass = data.nmaprun.host[0].os[0].osmatch[0].osclass[0].i
           }
           ipInfo.time_finished = data.nmaprun.host[0].i.endtime
-          fs.unlinkSync(xml)
+          if(fs.existsSync(xml))
+            fs.unlinkSync(xml)
           console.log(ipInfo)
           cb(ipInfo)
         }else{

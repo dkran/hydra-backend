@@ -23,7 +23,7 @@ const levels = {
     }
 }   
   module.exports = winston.createLogger({
-    level: 'debug',
+    level: 'info',
     levels: levels.levels,
     format: winston.format.combine(
         winston.format.json()

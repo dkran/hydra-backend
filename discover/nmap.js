@@ -45,7 +45,7 @@ module.exports = function(ip, port,cb){
           ipInfo.time_finished = data.nmaprun.host[0].i.endtime
           if(fs.existsSync(xml))
             fs.unlinkSync(xml)
-          console.log(ipInfo)
+          log.debug(ipInfo)
           cb(ipInfo)
         }else{
 

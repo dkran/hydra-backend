@@ -10,7 +10,6 @@ const wss = new WebSocket.Server({ port: 3000 });
         this.isAlive = true;
 }
 
-console.log(inspect(db, false, null))
 wss.on('connection', function connection(ws){
     log.info('Websocket connection initiated')
     ws.isAlive = true;

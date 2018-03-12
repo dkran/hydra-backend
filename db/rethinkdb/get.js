@@ -18,6 +18,7 @@ module.exports.getIPs = function () {
     r.connect({ host: 'localhost', port: 28015, db: 'scanner' }).then((conn) => {
       r.table('ips').run(conn).then((result)=>{
         result.toArray().then((result)=>{
+          //log.notice(result)
           resolve(result)
         }).catch(reject)
       }).catch(reject)

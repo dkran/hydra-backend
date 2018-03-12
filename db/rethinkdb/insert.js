@@ -3,7 +3,7 @@ var r = require('rethinkdb'),
   log = require('../../log');
 
 const insert = function (ip, port) {
-  log.debug('Rethinkdb Insert Called')
+  log.info('Rethinkdb Insert Called')
   return new Promise(function (resolve, reject) {
     r.connect({ host: 'localhost', port: 28015, db: 'scanner' }).then((conn) => {
       return r.table('ips').insert({ 'ip': ip, 'ports': [port] }).run(conn)
@@ -11,23 +11,20 @@ const insert = function (ip, port) {
   })
 }
 const update = function (ip, port, service) {
-  console.log('Rethinkdb Update Called')
   return new Promise((resolve, reject) => {
     r.connect({ host: 'localhost', port: 28015, db: 'scanner' }).then((conn) => {
       r.table('ips').filter({ 'ip': ip }).run(conn).then((data) => {
         data.toArray().then((ipData) => {
           if (ipData[0].ports.indexOf(port.toString()) !== -1) {
-            log.debug('port $(port) already existed on $(ip)')
           }
           if (ipData[0].ports.indexOf(port.toString()) === -1) {
             ipData[0].ports.push(port)
             r.table('ips').get(ipData[0].id).update({ 'ports': ipData[0].ports }).run(conn).then((data) => {
               resolve(data)
             }).catch(reject)
-            log.debug('Port adding %s', ipData[0])
           }
           if (service) {
-            ipData[0][port] = Object.assign(service.port, service.service, ipData[0])
+            ipData[0][port] = Object.assign(service.port, service.service)
             r.table('ips').get(ipData[0].id).update(ipData[0]).run(conn).then((data) => {
               resolve(data)
             }).catch(reject)

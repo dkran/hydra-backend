@@ -16,7 +16,7 @@ var handleError = (e) => {
 }
 var startTheEngine = function () {
     new Promise(function (resolve, reject) {
-        return r.connect({ host: 'localhost', port: 28015 }).then((conn) => {
+        r.connect({ host: 'localhost', port: 28015 }).then((conn) => {
             checkExists(conn).then((data) => {
                 log.info(data)
                 if (data) {
@@ -98,8 +98,9 @@ var startTheEngine = function () {
 
     })
 }
-
+startTheEngine()
 module.exports = {
+    initDB: startTheEngine,
     getIPs: get.getIPs,
     getIP: get.getIP,
     insert: insert.insert,

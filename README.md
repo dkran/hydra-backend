@@ -21,14 +21,14 @@ node app.js (or I prefer nodemon)
 ./srv/npm run build --report
 ```
 
-##Project Goals:
+## Project Goals:
  - Map the internet's state at all times in terms of services and ports on all IP's available.
  - I realize this is impossible, but I think we can do this.
 
-##Current Strategy: 
+## Current Strategy: 
  - Store all data in RethinkDB server  I think RethinkDB works well because of changefeeds.  Using node.js backend to run massscan, then if any port is found on an IP an nmap scan for top 100 ports is initiated. Websockets are used to alert clients of any updates.  Use Vue.js web interface to view incoming data, complete with nmap data parsed from xml to json.  I could do more like geoip and the like, but I'm working the long haul on this one, with help or without.
 
-##Production goals:
+## Production goals:
  - Host the server on a domain so anyone may publicly view it free from ads or paying.  I could do this now, but it doesn't look or function pretty yet, but the concept is implemented.  I will document code more.
  - Improve VueJS interface, websocket type definitions so they are more versatile.  
  - `nmap` scanning is the limiting factor here.  

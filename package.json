@@ -4,10 +4,10 @@
   "description": "Masscanner webui",
   "main": "app.js",
   "scripts": {
-    "dev": "webpack-dev-server --inline --progress --config srv/build/webpack.dev.conf.js & nodemon app.js",
+    "dev": "webpack-dev-server --inline --progress --config ./srv/build/webpack.dev.conf.js & nodemon app.js",
     "start": "nodemon app.js",
     "lint": "eslint --ext .js,.vue src",
-    "build": "node /rv/build/build.js"
+    "build": "node ./srv/build/build.js"
   },
   "repository": {
     "type": "git",

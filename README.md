@@ -1,6 +1,6 @@
 # scanner
 
-> nmap scanner web interface  Really interesting and fun to use, I promise you
+> nmap scanner web interface  Really interesting and fun to use, I promise you.  Seems to work on both linux (I test on kali), and OSX after some tweaks I made.  Must be run as superuser for the nmap scan type.
 
 ## Build Setup
 

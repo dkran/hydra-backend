@@ -9,6 +9,9 @@ module.exports = function(ip, port,cb){
   var xml = (__dirname + '/xml/' + ip + '-' + port)
   const nmap = spawn('nmap', ['-sS','-A','-p',port,'-oX',xml,ip])
   nmap.setMaxListeners(30)
+  nmap.stderr.on('error', (err)=>{
+    log.info(error)
+  })
   nmap.on('close',(data)=>{
     parser = new xml2js.Parser({attrkey: 'i'})
     var ipInfo = {
@@ -26,7 +29,7 @@ module.exports = function(ip, port,cb){
       time_finished: null  
     }
     if(fs.existsSync(xml))
-      unparsedXml = fs.readFileSync(xml).toString()
+      var unparsedXml = fs.readFileSync(xml).toString()
     if(unparsedXml){
       parser.parseString(unparsedXml, function(err, data){
         if(err) console.log(err)

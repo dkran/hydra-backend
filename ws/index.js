@@ -31,5 +31,8 @@ const broadcast = (data)=>{
           }
         })
     }
+process.on('uncaughtException', (data)=>{
+    console.log(data)
+})
 
 module.exports.broadcast = broadcast

@@ -22,7 +22,7 @@ wss.on('connection', function connection(ws){
         }))
     })
 
-    discover.scan('69.206.112.85','16',null,broadcast)
+    discover.scan('0.0.0.0','0',null,broadcast)
 })
 const broadcast = (data)=>{
         wss.clients.forEach((client)=>{

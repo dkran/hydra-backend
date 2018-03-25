@@ -1,16 +1,16 @@
 <template>
   <div id="app">
-    <p>Masscanner UI</p>
-    <ul v-for="ip in ips.data" :key="ip.ip">
-      <ip-info v-bind:ip="ip"></ip-info>
-    </ul>
+  <p>Masscanner UI</p>
+    <v-app>
+      <ip-info v-bind:ips="ips"></ip-info>
+    </v-app>
   </div>
 </template>
 
 <script>
 
 var ws = new WebSocket('ws://localhost:3000')
-import IpInfo from './components/IpInfo'
+import IpInfo from './components/IpInfo.vue'
 export default {
   data () {
     return {

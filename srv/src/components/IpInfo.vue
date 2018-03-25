@@ -1,45 +1,42 @@
 <template>
-  <div class="card" style="width: 20rem;">
-    <img class="card-img-top" alt="Card image cap">
-      <div class="card-block">
-        <h4 class="card-title">{{ip.ip}}</h4>
-        <ul>
-          <li v-for="port in ip.ports" v-if="ip[port]" :key="port">
-            <a target="_blank" v-if="(ip[port].product.indexOf('ssl' || 'https')) !== -1 || (port == 443)" :href="'https://' + ip.ip + ':' + port">{{port}}</a><span v-if="ip[port].product.indexOf('ssl' || 'https') !== -1"> {{ip[port].product}} {{ip[port].version}} {{ip[port].state}}</span>
-            <a target="_blank" v-if="ip[port].product.indexOf('ssl'|| 'https') == -1" :href="'http://' + ip.ip + ':' + port">{{port}}</a><span v-if="ip[port].product.indexOf('ssl' || 'https') == -1"> {{ip[port].product}} {{ip[port].version}} {{ip[port].state}}</span>
-          </li>
-          <li v-for="port in ip.ports" v-if="!ip[port]" :key="port"><a target="_blank" :href="'http://' + ip.ip + ':' +port">{{port}}</a>: Unknown</li>          
-        </ul>
-        <a href="#" class="btn btn-primary">Go somewhere</a>
-      </div>
-  </div>
+  <v-layout row>
+    <v-flex xs12 sm6 offset-sm3>
+        <v-flex fluid grid-list-sm>
+          <v-layout row wrap>
+            <v-flex xs4 v-for="ip in ips.data" :key="ip.ip">
+              <v-card>
+                <v-container fill-height fluid>
+                  <v-layout fill-height>
+                    <v-flex xs12 align-end flexbox>
+                     <span class="headline">{{ip.ip}}</span>
+                    </v-flex>
+                  </v-layout>
+                </v-container>
+                <v-card-title>
+                  <ul>
+                    <li v-for="port in ip.ports" v-if="!ip[port]" :key="port"><a target="_blank" :href="'http://' + ip.ip + ':' +port">{{port}}</a>: Unknown</li>                              
+                    <li v-for="port in ip.ports" v-if="ip[port]" :key="port">
+                      <a target="_blank" :href="'https://' + ip.ip + ':' + port">{{port}}</a><span> {{ip[port].product}} {{ip[port].version}} {{ip[port].state}}</span>
+                    </li>
+                  </ul>
+                </v-card-title>
+              </v-card>
+            </v-flex>
+          </v-layout>
+        </v-flex>
+    </v-flex>
+  </v-layout>
 </template>
 
 <script>
-
 export default {
-  name: 'IpInfo',
-  props: { ip: Object }
-
-  
-
-  
-}
+  name: "IpInfo",
+  props: { ips: Object }
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-h1, h2 {
-  font-weight: normal;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
 a {
   color: #42b983;
 }

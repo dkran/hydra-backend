@@ -21,7 +21,9 @@ wss.on('connection', function connection(ws){
             data: data
         }))
     })
-
+    ws.on('error', (error)=>{
+        log.info('Client Error: %s', error)
+    })
     discover.scan('69.0.0.0','8',null,broadcast)
 })
 const broadcast = (data)=>{

@@ -1,5 +1,5 @@
 node_modules
 src/node_modules
 discover/xml/*
-rethinkdb_data
+rethinkdb_data/
 paused.conf

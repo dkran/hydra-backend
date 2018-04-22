@@ -1,6 +1,6 @@
 var r = require('rethinkdb'),
   inspect = require('util').inspect,
-  log = require('../../log');
+  log = require('../log');
 
 
 module.exports.getIP = function (ip) {
@@ -24,6 +24,4 @@ module.exports.getIPs = function () {
       }).catch(reject)
     }).catch(reject)
   })
- 
-  
 }

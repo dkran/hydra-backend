@@ -1,13 +1,9 @@
 var r = require('rethinkdb'),
     inspect = require('util').inspect,
-    log = require('../../log'),
-    ip = {
-        ip: 'number',
-        ports: [],
-        geo: ''
-    },
+    log = require('../log'),
     get = require('./get')
     insert = require('./insert')
+    queue = require('./queue')
 const db = 'scanner'
 
 var handleError = (e) => {
@@ -24,13 +20,13 @@ var startTheEngine = function () {
                     r.dbCreate(db).run(conn).then((data) => {
                         log.info('DB Created: ', data)
                         log.info('Creating Tables')
-                        createTables(conn, ['ips', 'logs']).then((results) => {
+                        createTables(conn, ['ips', 'logs', 'queue']).then((results) => {
                             log.info("tables are ready for use")
                             resolve("Tables are ready for use")
                         }).catch(handleError)
                     }).catch(handleError)
                 } else if (!data) {
-                    createTables(conn, ['ips', 'logs']).then((results) => {
+                    createTables(conn, ['ips', 'logs','queue']).then((results) => {
                         //console.log(results)
                     }).catch(handleError)
                 }
@@ -104,5 +100,8 @@ module.exports = {
     getIPs: get.getIPs,
     getIP: get.getIP,
     insert: insert.insert,
-    update: insert.update
+    update: insert.update,
+    insertQueue: queue.insert,
+    getQueue: queue.getIPs
+    
 }

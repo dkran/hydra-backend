@@ -1,6 +1,6 @@
 var r = require('rethinkdb'),
   inspect = require('util').inspect,
-  log = require('../../log');
+  log = require('../log');
 
 const insert = function (ip, port) {
   log.debug('Rethinkdb Insert Called')

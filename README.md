@@ -1,6 +1,6 @@
-# scanner
+### hydra-backend
 
-> nmap scanner web interface  Really interesting and fun to use, I promise you.  Seems to work on both linux (I test on kali), and OSX after some tweaks I made.  Must be run as superuser for the nmap scan type.
+ - 
 
 ## Build Setup
 
@@ -9,6 +9,8 @@
 npm install
 
 # edit the adapter mac and router mac settings in the file.
+
+nano / vi / vim / emacs ./discover/index.js
 
 # start websocket / scanning server:
 node app.js (or I prefer nodemon)

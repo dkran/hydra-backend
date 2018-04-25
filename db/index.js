@@ -1,8 +1,8 @@
 var r = require('rethinkdb'),
     inspect = require('util').inspect,
     log = require('../log'),
-    get = require('./get')
-    insert = require('./insert')
+    get = require('./get'),
+    insert = require('./insert'),
     queue = require('./queue')
 const db = 'scanner'
 

@@ -1,31 +1,31 @@
 const r = require('rethinkdb'),
-    log = require('../log')
+  log = require('../log')
 
+const errHandle = (err)=>{
+  log.info(err)
+}
 const insert = function (ip) {
-    log.debug('Rethinkdb Insert Called on queue')
-    return new Promise(function (resolve, reject) {
-      r.connect({ host: 'localhost', port: 28015, db: 'scanner' }).then((conn) => {
-        log.info('inserted %s to Queue', ip)
-        return r.table('queue').insert(ip).run(conn)
-      })
-    })
-  }
-
-const getIPs = function (number) {
-    return new Promise((resolve, reject)=>{
+  log.debug('Rethinkdb Insert Called on queue')
+  return new Promise(function (resolve, reject) {
     r.connect({ host: 'localhost', port: 28015, db: 'scanner' }).then((conn) => {
-      r.table('queue').limit(number).run(conn).then((result)=>{
-        result.toArray().then((result)=>{
-          log.info('sent %s IPs to client', number)
-          
-          resolve(result)
-        }).catch(reject)
-      }).catch(reject)
-    }).catch(reject)
+      log.info('inserted %s to Queue', ip)
+      return r.table('queue').insert(ip).run(conn)
+    })
   })
 }
 
+const getIPs = function (number) {
+  return new Promise((resolve, reject) => {
+    r.connect({ host: 'localhost', port: 28015, db: 'scanner' }).then((conn) => {
+      r.table('queue').orderBy('time').limit(number).run(conn).then((result) => {
+        log.info('got result: %s', result)
+        return result.toArray()
+      }).catch(errHandle)
+    }).catch(errHandle)
+  }).catch(errHandle)
+}
+
 module.exports = {
-    insert: insert,
-    getIPs: getIPs 
+  insert: insert,
+  getIPs: getIPs
 }

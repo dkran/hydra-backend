@@ -282,14 +282,14 @@
 ## They need to be cleaned up, reformatted, and verified
 #
 # Army Information Systems Center
-6.0.0.0/8
+#6.0.0.0/8
 # US Defense Information Systems Agency
-21.0.0.0/8
+#21.0.0.0/8
 # Defense Information Systems Agency
-22.0.0.0/8
+#22.0.0.0/8
 # Comcast Cable Communications, Inc. I believe this is for residential customers.
-24.8.0.0/15
-24.0.0.0/12
+#24.8.0.0/15
+#24.0.0.0/12
 # Roadrunner, USA. Time Warner Cable Internet LLC
 24.88.0.0/16
 # James Cable, LLC

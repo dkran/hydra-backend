@@ -18,8 +18,11 @@ const getIPs = function (number) {
   return new Promise((resolve, reject) => {
     r.connect({ host: 'localhost', port: 28015, db: 'scanner' }).then((conn) => {
       r.table('queue').orderBy('time').limit(number).run(conn).then((result) => {
-        log.info('got result: %s', result)
-        return result.toArray()
+        r.table('queue').orderBy('time').limit(number).delete().run(conn).then((deleted)=>{
+          log.info('Deleted %s', deleted)
+          resolve(result)
+        }).catch(errHandle)
+          
       }).catch(errHandle)
     }).catch(errHandle)
   }).catch(errHandle)

@@ -10,13 +10,12 @@ const insert = function (ip, port, time) {
     })
   })
 }
-const update = function () {
+const update = function (data) {
   return new Promise((resolve, reject) => {
     r.connect({ host: 'localhost', port: 28015, db: 'scanner' }).then((conn) => {
-      r.table('ips').filter({ 'ip': ip }).run(conn).then((data) => {
+      r.table('ips').filter({ 'ip': data.host.address.addr }).run(conn).then((data) => {
         data.toArray().then((ipData) => {
           log.info('trying to add port %s', ipData)
-
           if (ipData[0].ports.indexOf(port.toString()) === -1) {
             ipData[0].ports.push(port)
             r.table('ips').get(ipData[0].id).update({ 'ports': ipData[0].ports }).run(conn).then((data) => {

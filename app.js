@@ -30,6 +30,13 @@ wss.on('connection', (ws) => {
       }).catch(log.info)
     }
     if (data.type === 'scanResult') {
+      db.getIP(data.data.host.address.addr).then((result)=>{
+        if(result > 0){
+          db.filter(result.ip).update(result).then((result)=>{
+            log.info(result)
+          })
+        }
+      })
       db.insert(data.data).then((result) => {
         log.info('Scan result submitted: %s', result)
       })

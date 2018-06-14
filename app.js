@@ -21,7 +21,7 @@ wss.on('connection', (ws) => {
     data = JSON.parse(data)
     console.log(data)
     if (data.type === 'getIps') {
-      var number = data.data
+      var number = 10-data.data
       db.getQueue(number).then((result) => {
         ws.send(JSON.stringify({ type: 'ipData', data: result}), (err) => {
           if (err !== undefined) log.info(err)
@@ -30,13 +30,6 @@ wss.on('connection', (ws) => {
       }).catch(log.info)
     }
     if (data.type === 'scanResult') {
-      db.getIP(data.data.host.address.addr).then((result)=>{
-        if(result > 0){
-          db.filter(result.ip).update(result).then((result)=>{
-            log.info(result)
-          })
-        }
-      })
       db.insert(data.data).then((result) => {
         log.info('Scan result submitted: %s', result)
       })

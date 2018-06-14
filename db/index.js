@@ -100,7 +100,6 @@ module.exports = {
     getIPs: get.getIPs,
     getIP: get.getIP,
     insert: insert.insert,
-    update: insert.update,
     insertQueue: queue.insert,
     getQueue: queue.getIPs
     

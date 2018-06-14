@@ -15,15 +15,12 @@ module.exports.scan = (ip, range) => {
         ip = ip || '0.0.0.0'
         range = range || '0'
         ports = '1-65535'
-        const scanner = spawn('masscan', ['--rate=60000000','--excludefile',(__dirname + '/exclude.txt'),'-p', ports, (ip + '/' + range)]);
+        const scanner = spawn('masscan', ['--rate=60000','--excludefile',(__dirname + '/exclude.txt'),'-p', ports, '-oJ', "-", (ip + '/' + range)]);
         scanner.stdout.on('data', (data) => {
-            var port = util.stripNums(data.toString().slice(21, 25))
-            var ip = util.stripNums(data.toString().slice(31, 48))
-            var time = Date.now()
-            db.insertQueue({ip: ip, port: port, time: time})       
+            log.info('got data %s', data)   
         })
         scanner.stderr.on('data', (data) => {
-            //console.log(data.toString())
+            console.log(data.toString())
         })
         scanner.on('close', (code) => {
             isScanning = false             
